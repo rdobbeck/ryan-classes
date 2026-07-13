@@ -1,0 +1,50 @@
+name: Scrape Ryan's Mag Mile classes
+
+on:
+  schedule:
+    - cron: '0 11 * * *'   # 11:00 UTC daily = ~6am CT
+  workflow_dispatch: {}      # allow manual runs
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install deps + Chromium
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Scrape
+        run: node scrape.mjs
+
+      - name: Commit if changed
+        run: |
+          git config user.name "ryan-classes-bot"
+          git config user.email "bot@users.noreply.github.com"
+          if ! git diff --quiet -- docs/classes.json; then
+            git add docs/classes.json
+            git commit -m "chore: refresh classes.json [skip ci]"
+            git push
+          else
+            echo "No schedule change."
+          fi
+
+      - name: Alert on failure (Push by Techulus)
+        if: failure()
+        env:
+          PUSH_KEY: ${{ secrets.PUSH_TECHULUS_KEY }}
+        run: |
+          if [ -n "$PUSH_KEY" ]; then
+            curl -s -X POST "https://push.techulus.com/api/v1/notify/$PUSH_KEY" \
+              -H "Content-Type: application/json" \
+              -d '{"title":"Ryan classes scraper failed","body":"Wodify layout may have changed. Check the GitHub Action + scrape.mjs."}' || true
+          fi
