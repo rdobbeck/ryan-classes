@@ -2,6 +2,13 @@
 // Online Sales schedule and writes docs/classes.json (this week + next week).
 // Wodify runs on OutSystems (no clean public API + token-gated endpoints), so we
 // render the page in a headless browser and read the DOM. See README for fragility notes.
+//
+// Per-class booking links: Wodify's "Book" button is a JS button (no href), and the
+// ClassId it books is not exposed anywhere in the DOM ahead of time — it only shows up
+// in the URL after the button is actually clicked (SPA navigation to a review-purchase
+// screen: `.../OnlineSalesPage/Main?q=ReviewPurchase|...&ClassId=<id>&...`). So for each
+// of Ryan's classes we click Book, capture that URL, then reload the schedule and
+// re-select the day before moving to the next class.
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 
@@ -44,41 +51,33 @@ function buildTargets() {
   return targets;
 }
 
-// --- parse one rendered day's class section for Ryan's classes ---
-function parseDay(sectionText) {
-  let sec = sectionText;
-  const cut = sec.search(/Powered by|\nMagMile CrossFit\n/);
-  if (cut > 0) sec = sec.slice(0, cut);
-  const lines = sec.split('\n').map((s) => s.trim()).filter(Boolean);
-  const timeRe = /^(\d{1,2}:\d{2}\s*(?:AM|PM))\s*-\s*(\d{1,2}:\d{2}\s*(?:AM|PM))$/i;
-  const blocks = [];
-  let cur = null;
-  for (const ln of lines) {
-    const m = ln.match(timeRe);
-    if (m) {
-      if (cur) blocks.push(cur);
-      cur = { start: m[1].replace(/\s+/g, ' '), end: m[2].replace(/\s+/g, ' '), lines: [] };
-    } else if (cur) cur.lines.push(ln);
-  }
-  if (cur) blocks.push(cur);
-  const classes = [];
-  for (const b of blocks) {
-    if (!b.lines.join(' ').includes(COACH)) continue;
-    const minIdx = b.lines.findIndex((l) => /^\d+\s*min$/i.test(l));
-    let title = (minIdx >= 0 ? b.lines[minIdx + 1] : b.lines[0]) || 'CrossFit';
-    title = title.replace(/:\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s*$/i, '').trim(); // drop redundant time suffix
-    classes.push({ start: b.start, end: b.end, title });
-  }
-  return classes;
+// --- read one rendered day's class rows from the DOM (structured, not text-blob parsing) ---
+async function readDayRows(page) {
+  return page.evaluate((COACH) => {
+    const timeRe = /^(\d{1,2}:\d{2}\s*(?:AM|PM))\s*-\s*(\d{1,2}:\d{2}\s*(?:AM|PM))$/i;
+    const items = Array.from(document.querySelectorAll('.list-item'));
+    return items.map((el, i) => {
+      const lines = el.innerText.split('\n').map((s) => s.trim()).filter(Boolean);
+      const m = lines[0] && lines[0].match(timeRe);
+      if (!m) return null;
+      const minIdx = lines.findIndex((l) => /^\d+\s*min$/i.test(l));
+      let title = (minIdx >= 0 ? lines[minIdx + 1] : lines[2]) || 'CrossFit';
+      title = title.replace(/:\s*\d{1,2}:\d{2}\s*(?:AM|PM)\s*$/i, '').trim();
+      const isCoach = lines.includes(COACH);
+      const hasBook = !!Array.from(el.querySelectorAll('button')).find((b) => b.textContent.trim() === 'Book');
+      return { rowIndex: i, start: m[1].replace(/\s+/g, ' '), end: m[2].replace(/\s+/g, ' '), title, isCoach, hasBook };
+    }).filter(Boolean);
+  }, COACH);
 }
 
-async function readClassSection(page) {
-  return page.evaluate(() => {
-    const scr = document.querySelector('.active-screen') || document.body;
-    const txt = scr.innerText;
-    const j = txt.search(/NEXT WEEK/i);
-    return j >= 0 ? txt.slice(j + 9) : txt;
-  });
+function extractClassId(url) {
+  if (!url.includes('ReviewPurchase')) return null;
+  const m = url.match(/ClassId=(\d+)/i);
+  return m ? m[1] : null;
+}
+
+function bookUrlFor(classId) {
+  return `https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=ReviewPurchase|OnlineMembershipId=280324&OnlineMembershipPaymentOptionId=0&ClassId=${classId}&LocationId=11492&IsToViewPurchaseOnly=False&PromoCodeInputParameter=`;
 }
 
 // Poll until the schedule has actually rendered class content (a time range appears).
@@ -107,6 +106,27 @@ async function loadSchedule(page) {
   return false;
 }
 
+async function selectDay(page, md) {
+  const cell = page.getByText(md, { exact: true }).first();
+  await cell.click({ timeout: 8000 });
+  await page.waitForTimeout(1400);
+}
+
+// Click the Book button for a given row index, capture the resulting ClassId, then
+// restore the schedule (reload + reselect day) so the caller can process the next row.
+async function captureBookUrl(page, md, rowIndex) {
+  const rows = page.locator('.list-item');
+  const bookBtn = rows.nth(rowIndex).getByText('Book', { exact: true });
+  await bookBtn.click({ timeout: 8000 });
+  await page.waitForTimeout(1500);
+  const url = page.url();
+  const classId = extractClassId(decodeURIComponent(url));
+  // restore schedule state for the next row
+  if (!(await loadSchedule(page))) throw new Error('schedule did not reload after booking click');
+  await selectDay(page, md);
+  return classId;
+}
+
 async function main() {
   const browser = await chromium.launch({ headless: true, channel: 'chromium' });
   const page = await browser.newPage({ timezoneId: TZ });
@@ -120,20 +140,37 @@ async function main() {
   const byWeek = new Map();
   for (const t of targets) {
     try {
-      const cell = page.getByText(t.md, { exact: true }).first();
-      await cell.click({ timeout: 8000 });
-      await page.waitForTimeout(1400);
-      const section = await readClassSection(page);
-      const classes = parseDay(section);
+      await selectDay(page, t.md);
+      let rows = await readDayRows(page);
+      const ryanRows = rows.filter((r) => r.isCoach);
+      const classes = [];
+      // Process from the bottom up: clicking Book navigates away and reload/reselect
+      // re-renders the day, but earlier row indices stay stable relative to unprocessed rows.
+      for (const r of ryanRows) {
+        let classId = null;
+        let bookUrl = null;
+        if (r.hasBook) {
+          try {
+            classId = await captureBookUrl(page, t.md, r.rowIndex);
+            if (classId) bookUrl = bookUrlFor(classId);
+          } catch (e) {
+            process.stderr.write(`    book-link capture failed for ${t.md} ${r.start}: ${e.message.split('\n')[0]}\n`);
+            // restore schedule state before continuing this day's loop
+            await loadSchedule(page);
+            await selectDay(page, t.md);
+          }
+        }
+        classes.push({ date: t.iso, day: t.day, start: r.start, end: r.end, title: r.title, bookUrl });
+      }
       if (classes.length) {
         if (!byWeek.has(t.weekOf)) byWeek.set(t.weekOf, []);
-        for (const c of classes) {
-          byWeek.get(t.weekOf).push({ date: t.iso, day: t.day, ...c });
-        }
+        byWeek.get(t.weekOf).push(...classes);
       }
       process.stderr.write(`  ${t.md} ${t.day}: ${classes.length} Ryan class(es)\n`);
     } catch (e) {
       process.stderr.write(`  ${t.md} ${t.day}: skipped (${e.message.split('\n')[0]})\n`);
+      // best-effort recovery so one bad day doesn't kill the rest of the run
+      await loadSchedule(page).catch(() => {});
     }
   }
   await browser.close();
@@ -157,7 +194,8 @@ async function main() {
   };
   mkdirSync('docs', { recursive: true });
   writeFileSync('docs/classes.json', JSON.stringify(out, null, 2));
-  process.stderr.write(`\nWrote docs/classes.json — ${total} classes across ${weeks.length} week(s).\n`);
+  const withLinks = weeks.reduce((n, w) => n + w.classes.filter((c) => c.bookUrl).length, 0);
+  process.stderr.write(`\nWrote docs/classes.json — ${total} classes across ${weeks.length} week(s), ${withLinks} with direct book links.\n`);
 }
 
 main().catch((e) => {
