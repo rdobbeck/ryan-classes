@@ -77,7 +77,7 @@ function extractClassId(url) {
 }
 
 function bookUrlFor(classId) {
-  return `https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=ReviewPurchase|OnlineMembershipId=280324&OnlineMembershipPaymentOptionId=0&ClassId=${classId}&LocationId=11492&IsToViewPurchaseOnly=False&PromoCodeInputParameter=`;
+  return `https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=${classId}&HasProgramAccess=False`;
 }
 
 // Poll until the schedule has actually rendered class content (a time range appears).
