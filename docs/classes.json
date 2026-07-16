@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-15T12:21:57.999Z",
+  "generatedAt": "2026-07-16T12:25:54.608Z",
   "coach": "Ryan Dobbeck",
   "gym": {
     "name": "MagMile CrossFit",
@@ -11,38 +11,6 @@
     {
       "weekOf": "2026-07-13",
       "classes": [
-        {
-          "date": "2026-07-15",
-          "day": "Wed",
-          "start": "5:30 AM",
-          "end": "6:30 AM",
-          "title": "CrossFit",
-          "bookUrl": null
-        },
-        {
-          "date": "2026-07-15",
-          "day": "Wed",
-          "start": "6:30 AM",
-          "end": "7:30 AM",
-          "title": "CrossFit",
-          "bookUrl": null
-        },
-        {
-          "date": "2026-07-15",
-          "day": "Wed",
-          "start": "7:30 AM",
-          "end": "8:30 AM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=175858487&HasProgramAccess=False"
-        },
-        {
-          "date": "2026-07-15",
-          "day": "Wed",
-          "start": "12:00 PM",
-          "end": "1:00 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=175858489&HasProgramAccess=False"
-        },
         {
           "date": "2026-07-16",
           "day": "Thu",
@@ -65,7 +33,7 @@
           "start": "3:30 PM",
           "end": "4:30 PM",
           "title": "CrossFit",
-          "bookUrl": null
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=175968726&HasProgramAccess=False"
         },
         {
           "date": "2026-07-17",
@@ -73,7 +41,7 @@
           "start": "4:30 PM",
           "end": "5:30 PM",
           "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=175968725&HasProgramAccess=False"
+          "bookUrl": null
         },
         {
           "date": "2026-07-17",
