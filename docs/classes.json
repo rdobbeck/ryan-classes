@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-10T11:52:01.273Z",
+  "generatedAt": "2026-08-11T11:48:12.155Z",
   "coach": "Ryan Dobbeck",
   "gym": {
     "name": "MagMile CrossFit",
@@ -11,14 +11,6 @@
     {
       "weekOf": "2026-08-10",
       "classes": [
-        {
-          "date": "2026-08-10",
-          "day": "Mon",
-          "start": "12:00 PM",
-          "end": "1:00 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177179241&HasProgramAccess=False"
-        },
         {
           "date": "2026-08-11",
           "day": "Tue",
