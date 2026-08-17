@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-14T11:48:11.521Z",
+  "generatedAt": "2026-08-17T11:30:24.178Z",
   "coach": "Ryan Dobbeck",
   "gym": {
     "name": "MagMile CrossFit",
@@ -9,39 +9,79 @@
   },
   "weeks": [
     {
-      "weekOf": "2026-08-10",
+      "weekOf": "2026-08-17",
       "classes": [
         {
-          "date": "2026-08-14",
+          "date": "2026-08-17",
+          "day": "Mon",
+          "start": "12:00 PM",
+          "end": "1:00 PM",
+          "title": "CrossFit",
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177543989&HasProgramAccess=False"
+        },
+        {
+          "date": "2026-08-17",
+          "day": "Mon",
+          "start": "4:30 PM",
+          "end": "5:30 PM",
+          "title": "CrossFit",
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177543990&HasProgramAccess=False"
+        },
+        {
+          "date": "2026-08-17",
+          "day": "Mon",
+          "start": "5:30 PM",
+          "end": "6:30 PM",
+          "title": "CrossFit",
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177543995&HasProgramAccess=False"
+        },
+        {
+          "date": "2026-08-17",
+          "day": "Mon",
+          "start": "6:30 PM",
+          "end": "7:30 PM",
+          "title": "CrossFit",
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177543992&HasProgramAccess=False"
+        },
+        {
+          "date": "2026-08-18",
+          "day": "Tue",
+          "start": "12:00 PM",
+          "end": "1:00 PM",
+          "title": "CrossFit",
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177600415&HasProgramAccess=False"
+        },
+        {
+          "date": "2026-08-21",
           "day": "Fri",
           "start": "12:00 PM",
           "end": "1:00 PM",
           "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177416738&HasProgramAccess=False"
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177784077&HasProgramAccess=False"
         },
         {
-          "date": "2026-08-14",
+          "date": "2026-08-21",
           "day": "Fri",
           "start": "3:30 PM",
           "end": "4:30 PM",
           "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177416740&HasProgramAccess=False"
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177784079&HasProgramAccess=False"
         },
         {
-          "date": "2026-08-14",
+          "date": "2026-08-21",
           "day": "Fri",
           "start": "4:30 PM",
           "end": "5:30 PM",
           "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177416739&HasProgramAccess=False"
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177784078&HasProgramAccess=False"
         },
         {
-          "date": "2026-08-14",
+          "date": "2026-08-21",
           "day": "Fri",
           "start": "5:30 PM",
           "end": "6:30 PM",
           "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177416744&HasProgramAccess=False"
+          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=177784083&HasProgramAccess=False"
         }
       ]
     }
