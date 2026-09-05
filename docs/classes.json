@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-04T14:53:50.529Z",
+  "generatedAt": "2026-09-05T13:46:10.764Z",
   "coach": "Ryan Dobbeck",
   "gym": {
     "name": "MagMile CrossFit",
@@ -12,44 +12,12 @@
       "weekOf": "2026-08-31",
       "classes": [
         {
-          "date": "2026-09-04",
-          "day": "Fri",
-          "start": "12:00 PM",
-          "end": "1:00 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=178647172&HasProgramAccess=False"
-        },
-        {
-          "date": "2026-09-04",
-          "day": "Fri",
-          "start": "3:30 PM",
-          "end": "4:30 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=178647174&HasProgramAccess=False"
-        },
-        {
-          "date": "2026-09-04",
-          "day": "Fri",
-          "start": "4:30 PM",
-          "end": "5:30 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=178647173&HasProgramAccess=False"
-        },
-        {
-          "date": "2026-09-04",
-          "day": "Fri",
-          "start": "5:30 PM",
-          "end": "6:30 PM",
-          "title": "CrossFit",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=178647178&HasProgramAccess=False"
-        },
-        {
           "date": "2026-09-05",
           "day": "Sat",
           "start": "8:00 AM",
           "end": "9:00 AM",
           "title": "Hybrid Hour",
-          "bookUrl": "https://magmilecrossfit.wodify.com/OnlineSalesPage/Main?q=MembershipType|LocationId=11492&ClassId=185172702&HasProgramAccess=False"
+          "bookUrl": null
         },
         {
           "date": "2026-09-05",
