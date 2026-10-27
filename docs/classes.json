@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-26T17:11:19.584Z",
+  "generatedAt": "2026-10-27T16:17:06.614Z",
   "coach": "Ryan Dobbeck",
   "gym": {
     "name": "MagMile CrossFit",
@@ -11,14 +11,6 @@
     {
       "weekOf": "2026-10-26",
       "classes": [
-        {
-          "date": "2026-10-26",
-          "day": "Mon",
-          "start": "12:00 PM",
-          "end": "1:00 PM",
-          "title": "CrossFit",
-          "bookUrl": null
-        },
         {
           "date": "2026-10-27",
           "day": "Tue",
